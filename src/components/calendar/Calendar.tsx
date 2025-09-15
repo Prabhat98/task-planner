@@ -2,6 +2,12 @@ import React, { FunctionComponent, useState } from "react";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, format } from "date-fns";
 import { Task, Category } from "../../models/models";
 import TaskModal from "../modal/TaskModal";
+import {
+    DndContext,
+    DragEndEvent,
+} from "@dnd-kit/core";
+
+import DraggableTask from "../draggableTask/DraggableTask"
 import "./calendar.scss";
 
 const Calendar: FunctionComponent = () => {
@@ -50,6 +56,26 @@ const Calendar: FunctionComponent = () => {
         setDragEnd(null);
     };
 
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        if (!over) return;
+
+        const dayString = over.id as string;
+        const dayDate = new Date(dayString);
+
+        setTasks((prev) =>
+            prev.map((t) =>
+                t.id === active.id
+                    ? {
+                        ...t,
+                        startDate: dayDate.toISOString(),
+                        endDate: dayDate.toISOString(),
+                    }
+                    : t
+            )
+        );
+    };
+
     const getGridDay = (day: Date) => {
         const isSelected =
             dragStart &&
@@ -71,9 +97,10 @@ const Calendar: FunctionComponent = () => {
             >
                 <span className="date">{format(day, "d")}</span>
                 {dayTasks.map((t) => (
-                    <div key={t.id} className={`task ${t.category.toLowerCase().replace(" ", "-")}`}>
-                        {t.name}
-                    </div>
+                    // <div key={t.id} className={`task ${t.category.toLowerCase().replace(" ", "-")}`}>
+                    //     {t.name}
+                    // </div>
+                    <DraggableTask key={t.id} task={t} />
                 ))}
             </div>
         )
@@ -88,11 +115,13 @@ const Calendar: FunctionComponent = () => {
                     </div>
                 ))}
             </div>
-            <div className="calendar-grid">
-                {days.map((day) => (
-                    getGridDay(day)
-                ))}
-            </div>
+            <DndContext onDragEnd={handleDragEnd}>
+                <div className="calendar-grid">
+                    {days.map((day) => (
+                        getGridDay(day)
+                    ))}
+                </div>
+            </DndContext>
             {
                 showModal && (
                     <TaskModal
