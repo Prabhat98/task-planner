@@ -1,0 +1,17 @@
+.modal {
+    position: fixed;
+    top: 20%;
+    left: 10%;
+    height: 60%;
+    width: 80%;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .modal-fields{
+    display: flex;
+    flex-direction: column
+  }

@@ -31,4 +31,29 @@
     top: 4px;
     right: 4px;
   }
+
+  .selected {
+    background: rgba(0, 123, 255, 0.2);
+  }
+
+  .task {
+    margin-top: 18px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #fff;
+  }
   
+  .task.to-do {
+    background: #007bff;
+  }
+  .task.in-progress {
+    background: #ffc107;
+    color: #000;
+  }
+  .task.review {
+    background: #17a2b8;
+  }
+  .task.completed {
+    background: #28a745;
+  }
